@@ -1,0 +1,27 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3,10%);
+    grid-template-rows: repeat(3,10%);
+    column-gap: 23%;
+    row-gap: 30%;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 25%;
+}
+
+body {
+    background-color: black;
+}
+
+.grid-item {
+    color: white;
+}
+
+#moves {
+    position: fixed;
+    left: 30%;
+    right: 25%;
+    top: 80%;
+    color: white;
+}
