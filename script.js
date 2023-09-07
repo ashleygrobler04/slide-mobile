@@ -69,21 +69,16 @@ class Game {
       v.addEventListener("click", (event) => {
         const targetX = parseInt(event.target.dataset.x);
         const targetY = parseInt(event.target.dataset.y);
-        console.log("Clicked on ", targetX, targetY);
         if (targetX < 2 && this.grid[targetY][targetX + 1] === ".") {
-          alert("Moving item to the right");
           this.move("right", event);
           this.render();
         } else if (targetX > 0 && this.grid[targetY][targetX - 1] === ".") {
-          alert("Moving item to the left.");
           this.move("left", event);
           this.render();
         } else if (targetY < 2 && this.grid[targetY + 1][targetX] === ".") {
-          alert("Moving your item down");
           this.move("down", event);
           this.render();
         } else if (targetY > 0 && this.grid[targetY - 1][targetX] === ".") {
-          alert("Moving your item up");
           this.move("up", event);
           this.render();
         } else {
