@@ -53,14 +53,21 @@ class Game {
   }
 
   hasWon() {
-    return (
-      this.grid.toString() ===
-      [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, "."],
-      ].toString()
-    );
+    const winningState = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, "."],
+    ];
+
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid[i].length; j++) {
+        if (this.grid[i][j] !== winningState[i][j]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   addClickListeners() {
@@ -83,6 +90,10 @@ class Game {
           this.render();
         } else {
           alert("Invalid move!");
+        }
+        if (this.hasWon()) {
+          alert("Congratulations!\\nYou re-ordered all the numbers!");
+          window.location.reload();
         }
       });
     });
