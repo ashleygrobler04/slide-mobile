@@ -1,5 +1,7 @@
 const container = document.getElementsByClassName("grid-container")[0];
 const moves = document.getElementById("moves");
+const soundCache = {};
+const audioCtx = new AudioContext();
 
 class Game {
   constructor() {
@@ -13,6 +15,8 @@ class Game {
     this.populateGrid();
     this.addClickListeners();
     this.render();
+    //Do this for first time load and to cache the sound...
+    play_sound("./move.mp3");
   }
 
   randomizeGrid() {
@@ -79,15 +83,19 @@ class Game {
         if (targetX < 2 && this.grid[targetY][targetX + 1] === ".") {
           this.move("right", event);
           this.render();
+          play_sound("./move.mp3");
         } else if (targetX > 0 && this.grid[targetY][targetX - 1] === ".") {
           this.move("left", event);
           this.render();
+          play_sound("./move.mp3");
         } else if (targetY < 2 && this.grid[targetY + 1][targetX] === ".") {
           this.move("down", event);
           this.render();
+          play_sound("./move.mp3");
         } else if (targetY > 0 && this.grid[targetY - 1][targetX] === ".") {
           this.move("up", event);
           this.render();
+          play_sound("./move.mp3");
         } else {
           alert("Invalid move!");
         }
@@ -161,3 +169,35 @@ class Game {
   }
 }
 const g = new Game();
+function fetchAndDecodeAudio(path) {
+  return fetch(path)
+    .then((response) => response.arrayBuffer())
+    .then((buffer) => {
+      return audioCtx.decodeAudioData(buffer);
+    });
+}
+
+function play_sound(path) {
+  if (soundCache.hasOwnProperty(path)) {
+    // Sound is already cached, play it from the cache
+    const audioBuffer = soundCache[path];
+    playFromBuffer(audioBuffer);
+  } else {
+    // Fetch and decode the audio, then cache and play it
+    fetchAndDecodeAudio(path)
+      .then((audioBuffer) => {
+        soundCache[path] = audioBuffer;
+        playFromBuffer(audioBuffer);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch and decode audio:", error);
+      });
+  }
+}
+
+function playFromBuffer(audioBuffer) {
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(audioCtx.destination);
+  source.start(0);
+}
